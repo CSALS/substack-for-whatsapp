@@ -15,3 +15,7 @@ export interface Subscribers {
     authorId: string;
     subscriberIds: string[];
 }
+
+export const isAuthor = (user: User): boolean => {
+    return user.posts.length > 0;
+}
