@@ -12,5 +12,6 @@ export interface Post {
 }
 
 export interface Subscribers {
-    id: string[];
+    authorId: string;
+    subscriberIds: string[];
 }
