@@ -1,4 +1,4 @@
-export interface UserModel {
+export interface TwilioUserModel {
     ProfileName: string;
     WaId: string;
     Body: string;
@@ -6,6 +6,6 @@ export interface UserModel {
     MediaUrl0: string;
 }
 
-export const getPhoneNumber = (userModel: UserModel): number => {
+export const getPhoneNumber = (userModel: TwilioUserModel): number => {
     return parseInt(userModel.WaId.substring(userModel.WaId.length - 10), 10) as number;
 }
