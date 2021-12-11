@@ -5,6 +5,14 @@ import { Post } from '../models';
 
 const usersRef = database.collection('users');
 
+export const getUserById = (key: string) :UserEntry=> {
+      return usersRef.doc(key).get() as UserEntry;
+}
+
+export const getUsers= () :UserEntry[]=> {
+  return usersRef.get() as UserEntry[];
+}
+
 export const createUser = async(key: string, value: UserEntry) => {
     
     try {
@@ -46,5 +54,6 @@ export const createPost = async(key: string, post:Post) => {
         return false;
       }
 }
+
 
 
