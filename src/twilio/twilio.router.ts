@@ -1,77 +1,62 @@
 import express, { Request, Response } from 'express';
-import { UserModel } from './twilio.models';
-import { subscribeUser, unsubscribeUser, getModels, registerAuthor, isExpectingPostFromTheUser } from './twilio.controller';
+import { TwilioUserModel } from './twilio.models';
+import { TwilioController } from './twilio.controller';
 import { twiml } from 'twilio';
 
 export const twilioRouter  = express.Router();
 
-twilioRouter.get('/getModels', (req: Request, res: Response) => {
-    res.json(getModels())
-});
+twilioRouter.post('/receive', async (req: Request, res: Response) => {
+    const userModel = req.body as TwilioUserModel
+    const twilioController = new TwilioController(userModel)
+    userModel.Body = userModel.Body.toLowerCase().trim()
+    const userMessage = userModel.Body
 
-//TODO: exit ifs. maybe return message directly?
-twilioRouter.post('/receive', (req: Request, res: Response) => {
-    const userModel = req.body as UserModel;
-    userModel.Body = userModel.Body.toLowerCase().trim();
-    const userMessage = userModel.Body;
+    let messageToSend = ""
 
-    let messageToSend = "Invalid command";
-
-    if (userMessage.includes("hi") || userMessage.includes("hello") || userMessage.includes("hey")) {
-        //if user doesn't exist
-        messageToSend = "Hi there! \nWelcome to the Substack for India. \nSubscribe to an author to get receive articles";
-        //if users exists show the list of commands they can use
-    }
-
-    if (userMessage.includes("help")) {
-        //list of commands user can use
-    }
-
-    if (userMessage.includes("take feedback")) {
-        //take feedback from subscribers
-    }
-    
-    //READERS
-    if (userMessage.includes("subscribe to")) {
-        //subscribe current user to the given user
-        //sample msg :- subscribe to <123456789>
-        messageToSend = subscribeUser(userModel);
-    }
-    if (userMessage.includes("unsubscribe from")) {
-        //unsubscribe current user from the given user
-        //sample msg :- unsubscribe from <123456789>
-        messageToSend = unsubscribeUser(userModel);
-    }
-
-    //WRITERS
-    if (userMessage.includes("register")) {
-        //register user in database
-        messageToSend = registerAuthor(userModel);
-    }
-    if (userMessage.includes("unregister")) {
-        //cleans user details from database
-    }
-
-    if (userMessage.includes("write post")) {
-        //send response -> Please start writing below
-        
-    }
-    if (userMessage.includes("yes")) {
-
-    }
-    if (userMessage.includes("no")) {
-
-    }
-
-    const isExpectingPost = isExpectingPostFromTheUser(userModel);
+    const isExpectingPost = await twilioController.isExpectingArticleFromTheUser()
     if (isExpectingPost) {
-
+        messageToSend = await twilioController.storeArticle()
     }
-    
-    /*
-        Might be the content sent
-        check if we sent the same user to write the post from our system
-    */
+    else if (userMessage === "write article") {
+        messageToSend = await twilioController.initiateArticleWrite()
+    }
+    else if (userMessage === "yes") {
+        messageToSend = await twilioController.sendArticleToSubscribers()
+    }
+    else if (userMessage === "no") {
+        messageToSend = await twilioController.cancelArticle()
+    }
+    else if (userMessage === "hi" || userMessage === "hello" || userMessage === "hey") {
+        messageToSend = "Hi there! \nWelcome to the *Substack-For-Whatsapp*. \nSubscribe to an author to receive articles";
+    }
+    else if (userMessage.includes("subscribe to")) {
+        messageToSend = await twilioController.subscribeUser();
+    }
+    else if (userMessage.includes("unsubscribe from")) {
+        messageToSend = await twilioController.unsubscribeUser();
+    }
+    else if (userMessage === "register me") {
+        messageToSend = await twilioController.registerUser();
+    }
+    else if (userMessage === "my subscriptions") {
+        messageToSend = await twilioController.getSubscriptions()
+    }
+    else if (userMessage === "my stats") {
+        messageToSend = await twilioController.getAuthorStatistics()
+    }
+    else if (userMessage === "help") {
+        messageToSend =
+            "List of commands you can use :- \n" +
+            "- If you are not yet registered send *register me* \n" +
+            "- If you want to subscribe to an author send *subscribe to <AuthorID>* \n" +
+            "- If you want to unsubscribe from an author send *unsubscribe from <AuthorID>* \n" +
+            "- If you want to write an article for your subscribers send *write article* \n" +
+            "- If you want to list your subscriptions send *my subscriptions* \n" +
+            "- If you want to find your statistics send *my stats* \n"
+    }
+    else {
+        messageToSend = "Invalid command. Press help to check list of commands"
+    }
 
     const customTwiml = new twiml.MessagingResponse();
     customTwiml.message(messageToSend);
