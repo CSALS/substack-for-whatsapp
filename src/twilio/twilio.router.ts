@@ -27,7 +27,7 @@ twilioRouter.post('/receive', async (req: Request, res: Response) => {
         messageToSend = await twilioController.cancelArticle()
     }
     else if (userMessage === "hi" || userMessage === "hello" || userMessage === "hey") {
-        messageToSend = "Hi there! \nWelcome to the *Substack-For-Whatsapp*. \nSubscribe to an author to receive articles";
+        messageToSend = "Hi there 😃\nWelcome to the *Substack-For-Whatsapp*. \nSubscribe to an author to receive articles";
     }
     else if (userMessage.includes("subscribe to")) {
         messageToSend = await twilioController.subscribeUser();
@@ -46,7 +46,8 @@ twilioRouter.post('/receive', async (req: Request, res: Response) => {
     }
     else if (userMessage === "help") {
         messageToSend =
-            "List of commands you can use :- \n" +
+            "Hey there 🙂\n" +
+            "Here are list of commands you can use :- \n" +
             "- If you are not yet registered send *register me* \n" +
             "- If you want to subscribe to an author send *subscribe to <AuthorID>* \n" +
             "- If you want to unsubscribe from an author send *unsubscribe from <AuthorID>* \n" +
@@ -55,7 +56,7 @@ twilioRouter.post('/receive', async (req: Request, res: Response) => {
             "- If you want to find your statistics send *my stats* \n"
     }
     else {
-        messageToSend = "Invalid command. Press help to check list of commands"
+        messageToSend = "Invalid command 🤨\nPress *help* to check list of commands"
     }
 
     const customTwiml = new twiml.MessagingResponse();

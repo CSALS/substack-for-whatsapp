@@ -90,7 +90,7 @@ export class TwilioController {
                     return `Author ${authorId} not found`;
                 }
             } else {
-                return "You are not registered\nSend \"register me\" to register"
+                return "You are not registered 🤔\nSend \"register me\" to register"
             }
         } catch (err) {
             console.log(`Error in unsubscribing user ${err}`)
@@ -102,7 +102,7 @@ export class TwilioController {
         try {
             let user = await this.getRegisteredUser();
             if (!user) {
-                return "You are not registered\nSend \"register me\" to register"
+                return "You are not registered 🤔\nSend \"register me\" to register"
             }
             if (user.details.subscribers.length == 0) {
                 return "You have no subscribers 😿"
@@ -122,7 +122,7 @@ export class TwilioController {
         try {
             let user = await this.getRegisteredUser();
             if (!user) {
-                return "You are not registered\nSend \"register me\" to register"
+                return "You are not registered 🤔\nSend \"register me\" to register"
             }
 
             if (!user.details.articles || user.details.articles.length === 0) {
@@ -151,7 +151,7 @@ export class TwilioController {
         try {
             let user = await this.getRegisteredUser();
             if (!user) {
-                return "You are not registered\nSend \"register me\" to register"
+                return "You are not registered 🤔\nSend \"register me\" to register"
             }
             const article = user.details.articles.find(article => !article.confirmed)
             if (!article) {
@@ -187,7 +187,7 @@ export class TwilioController {
         try {
             let user = await this.getRegisteredUser()
             if (!user) {
-                return "You are not registered\nSend \"register me\" to register"
+                return "You are not registered 🤔\nSend \"register me\" to register"
             }
             const articleToRemoved = user.details.articles.find(article => !article.confirmed)
             if (articleToRemoved) {
@@ -205,7 +205,7 @@ export class TwilioController {
         try {
             let user = await this.getRegisteredUser()
             if (!user) {
-                return "You are not registered\nSend \"register me\" to register"
+                return "You are not registered 🤔\nSend \"register me\" to register"
             }
 
             return "Here are your statistics \n" +
@@ -221,7 +221,7 @@ export class TwilioController {
         try {
             let user = await this.getRegisteredUser()
             if (!user) {
-                return "You are not registered\nSend \"register me\" to register"
+                return "You are not registered 🤔\nSend \"register me\" to register"
             }
             const allUsers = await this.userController.getUsers()
             let subscribedAuthors = ""
