@@ -1,12 +1,13 @@
 import * as dotenv from "dotenv";
 dotenv.config();
+const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
+const { getFirestore, Timestamp, FieldValue } = require('firebase-admin/firestore');
 
-var admin = require("firebase-admin");
+initializeApp();
 var serviceAccount = require(process.env.FIREBASE_CREDS_PATH as string);
 
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://team-jordan-default-rtdb.firebaseio.com",
+initializeApp({
+  credential: cert(serviceAccount)
 });
 
-export const database = admin.database();
+export const database = getFirestore();
