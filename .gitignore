@@ -1,3 +1,4 @@
 .env
 firebaseCreds.json
 node_modules/
+.idea/
