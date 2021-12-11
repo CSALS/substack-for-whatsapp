@@ -1,12 +1,14 @@
 import { database } from './firebase.config';
 import { User, UserDetails } from '../models';
-import {firestore} from "firebase-admin/lib/firestore/firestore-namespace";
+import { firestore } from "firebase-admin/lib/firestore/firestore-namespace";
 import QueryDocumentSnapshot = firestore.QueryDocumentSnapshot;
 
-export class UserController {
+export class UserCollectionController {
+    private COLLECTION_NAME = 'users'
+
     async getUsers(): Promise<User[]> {
         const users: User[] = [];
-        const snapshot = await database.collection('users').get();
+        const snapshot = await database.collection(this.COLLECTION_NAME).get();
         snapshot.forEach((doc: QueryDocumentSnapshot) => {
             users.push({
                 id: doc.id,
@@ -17,12 +19,11 @@ export class UserController {
     }
 
     async createUser(user: User) {
-        try {
-            const userRef = database.collection('users').doc(user.id);
-            await userRef.doc(user.id).set(user.details);
-            return "Created"
-        } catch (err) {
-            console.log("Error in creating user", err);
-        }
+        const userRef = database.collection(this.COLLECTION_NAME);
+        await userRef.doc(user.id).set(user.details);
+    }
+
+    async updateUserDetails(authorId: string, details: UserDetails) {
+        await database.collection(this.COLLECTION_NAME).doc(authorId).update(details)
     }
 }
