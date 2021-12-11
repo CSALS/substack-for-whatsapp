@@ -1,5 +1,5 @@
 import { database } from './firebase.config';
-import { User, UserDetails, Post } from '../models';
+import { User, UserDetails } from '../models';
 import {firestore} from "firebase-admin/lib/firestore/firestore-namespace";
 import QueryDocumentSnapshot = firestore.QueryDocumentSnapshot;
 
