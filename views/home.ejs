@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Substack for India</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300&display=swap" rel="stylesheet">
+        <style>
+            * {
+                font-family: 'Sora', sans-serif;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="myDiv" style="float:top;">
+            <h1>Substack for India</h1>
+        </div>
+        <hr>
+        <div style="float:left;margin-left:100px;margin-top:150px;">
+            <ul style="font-size:20px;">
+                <li>There are 500M+ users on whatsapp from India</li>
+                <li>Share your articles, newsletter, thoughts to your audience right from whatsapp</li>
+                <li>All your content sent directly to your audience whatsapp</li>
+                <li><strong>Full privacy.</strong> Your number won't be shared to your audience</li>
+            </ul>
+        </div>
+        <div style="float:right;margin-right:200px;margin-top:50px;">
+            <h2>Scan to Register</h2>
+            <div id="qrcode"></div>
+        </div>
+        <div style="position:fixed;width:100%;bottom:0;padding-bottom:25px;font-size:120%;">
+            <hr>
+            <text>Project by Team Jordans</text>
+        </div>
+    </body>
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+    <script type="text/javascript">
+        const number = "<%- twilioBotNumber %>"
+        const message = "<%- registerMessage %>"
+        new QRCode(document.getElementById("qrcode"), `https://api.whatsapp.com/send?phone=${number}&text=${message}`)
+    </script>
+
+</html>

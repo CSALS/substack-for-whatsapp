@@ -169,7 +169,7 @@ export class TwilioController {
                 if (subscriber) {
                     await twilioClient.messages.create({
                         from: `whatsapp:${process.env.TWILIO_BOT_NUMBER}`,
-                        body: `Article from ${user.details.name} :-\n${article.text}`,
+                        body: `*Article from ${user.details.name}* :-\n${article.text}`,
                         mediaUrl: article.mediaUrl,
                         to: `whatsapp:+91${subscriber.details.number}`
                     })
