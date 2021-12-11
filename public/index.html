@@ -1,10 +1,48 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Substack For India</title>
-    </head>
+<html lang="en">
 
-    <body>
-        <h1>HELLO WORLD!</h1>
-    </body>
+<title>Substack for India</title>
+<script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+<style>
+.myDiv {
+  border: 5px outset black;
+  background-color: lightblue;
+  text-align: center;
+  margin: 40px;
+}
+
+footer {
+  padding: 10px;
+  text-align: center;
+}
+</style>
+
+<body>
+	<div class="myDiv" style="float:top;">
+    	<h1>Substack for India</h1>
+    </div>
+    <hr>
+    <div style="float:left; margin: 40px;">
+    	<h2>Amazing features of this App:</h2>
+        <ul style="font-size: 25px;">
+  			<li>Share articles through whatsapp</li>
+  			<li>..................</li>
+  			<li>.............</li>
+		</ul>
+    </div>
+    <div id="qrcode" class="myDiv" style="float:right;">
+    	<h2>Scan to Register</h2>
+    </div>
+    
+    <div style="position: fixed; Width: 100%; bottom: 0; background-color: lightblue; text-align: center;">
+    	<p> Team Jordans </p>
+    </div>
+</body>
+
+
+<script type="text/javascript">
+    new QRCode(document.getElementById("qrcode"),
+        "https://api.whatsapp.com/send?phone=14155238886&text=Register%20Me")
+</script>
+
 </html>
