@@ -1,10 +1,10 @@
 import * as dotenv from "dotenv";
-dotenv.config();
-const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
-const { getFirestore, Timestamp, FieldValue } = require('firebase-admin/firestore');
+const { initializeApp, cert } = require('firebase-admin/app');
+const { getFirestore } = require('firebase-admin/firestore');
 
-initializeApp();
-var serviceAccount = require(process.env.FIREBASE_CREDS_PATH as string);
+dotenv.config();
+
+const serviceAccount = require(process.env.FIREBASE_CREDS_PATH as string);
 
 initializeApp({
   credential: cert(serviceAccount)

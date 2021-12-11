@@ -1,50 +1,28 @@
 import { database } from './firebase.config';
-import { UserEntry } from '../models';
-import { Post } from '../models';
+import { User, UserDetails, Post } from '../models';
+import {firestore} from "firebase-admin/lib/firestore/firestore-namespace";
+import QueryDocumentSnapshot = firestore.QueryDocumentSnapshot;
 
+export class UserController {
+    async getUsers(): Promise<User[]> {
+        const users: User[] = [];
+        const snapshot = await database.collection('users').get();
+        snapshot.forEach((doc: QueryDocumentSnapshot) => {
+            users.push({
+                id: doc.id,
+                details: doc.data() as UserDetails
+            })
+        });
+        return users;
+    }
 
-const usersRef = database.collection('users');
-
-export const createUser = async(key: string, value: UserEntry) => {
-    
-    try {
-        await usersRef.doc(key).set(value);
-        return true;
-      } catch (e) {
-        console.log('Transaction failure:', e);
-        return false;
-      }
+    async createUser(user: User) {
+        try {
+            const userRef = database.collection('users').doc(user.id);
+            await userRef.doc(user.id).set(user.details);
+            return "Created"
+        } catch (err) {
+            console.log("Error in creating user", err);
+        }
+    }
 }
-
-export const updateUser = async(key: string, value: any) => {
-
-    try {
-        await usersRef.doc(key).set(value);
-        return true;
-      } catch (e) {
-        console.log('Transaction failure:', e);
-        return false;
-      }
-}
-
-export const deleteUser = async(key: string) => {
-    try {
-        await usersRef.doc(key).delete();
-        return true;
-      } catch (e) {
-        console.log('Transaction failure:', e);
-        return false;
-      }
-}
-
-export const createPost = async(key: string, post:Post) => {
-    try {
-        await usersRef.doc(key).doc('posts').add(post);
-        return true;
-      } catch (e) {
-        console.log('Transaction failure:', e);
-        return false;
-      }
-}
-
-

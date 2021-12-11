@@ -1,9 +1,9 @@
-export interface UserEntry {
+export interface User {
     id: string;
-    user: User
+    details: UserDetails
 }
 
-export interface User {
+export interface UserDetails {
     name: string;
     number: number;
     posts: Post[];
@@ -16,6 +16,6 @@ export interface Post {
     timestamp: number;
 }
 
-export const isAuthor = (user: User): boolean => {
+export const isAuthor = (user: UserDetails): boolean => {
     return user.posts.length > 0;
 }
