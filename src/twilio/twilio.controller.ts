@@ -225,9 +225,9 @@ export class TwilioController {
             }
             const allUsers = await this.userController.getUsers()
             let subscribedAuthors = ""
-            allUsers.forEach((user) => {
-                if (user.details.subscribers.find(subscriberId => subscriberId === user.id)) {
-                    subscribedAuthors += `${user.details.name} (ID - ${user.id}) \n`
+            allUsers.forEach((author) => {
+                if (author.details.subscribers.find(subscriberId => subscriberId === user!!.id)) {
+                    subscribedAuthors += `- *${author.details.name}* (ID - ${author.id}) \n`
                 }
             })
 
