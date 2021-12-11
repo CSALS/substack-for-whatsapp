@@ -1,6 +1,6 @@
 import { TwilioUserModel, getPhoneNumber } from './twilio.models';
 import { UserDetails, User } from '../models';
-import {UserController} from "../firebase/firebase.controller";
+import {UserCollectionController} from "../firebase/firebase.controller";
 import * as dotenv from "dotenv";
 const twilio = require('twilio');
 
@@ -8,10 +8,10 @@ dotenv.config();
 
 export class TwilioController {
     private userModel: TwilioUserModel
-    private userController: UserController
+    private userController: UserCollectionController
 
     constructor(userModel: TwilioUserModel) {
-        this.userController = new UserController()
+        this.userController = new UserCollectionController()
         this.userModel = userModel
     }
 
