@@ -44,6 +44,12 @@ twilioRouter.post('/receive', async (req: Request, res: Response) => {
     else if (userMessage === "my stats") {
         messageToSend = await twilioController.getAuthorStatistics()
     }
+    else if (userMessage === "my user id") {
+        messageToSend = await twilioController.getUserId()
+    }
+    else if (userMessage === "my qr code") {
+        messageToSend = await twilioController.generateQRCodeWebsite()
+    }
     else if (userMessage === "help") {
         messageToSend =
             "Hey there 🙂\n" +
@@ -53,7 +59,9 @@ twilioRouter.post('/receive', async (req: Request, res: Response) => {
             "- If you want to unsubscribe from an author send *unsubscribe from <AuthorID>* \n" +
             "- If you want to write an article for your subscribers send *write article* \n" +
             "- If you want to list your subscriptions send *my subscriptions* \n" +
-            "- If you want to find your statistics send *my stats* \n"
+            "- If you want to find your statistics send *my stats* \n" +
+            "- If you want to know your user id send *my user id* \n" +
+            "- If you want to download your QR code send *my qr code* \n"
     }
     else {
         messageToSend = "Invalid command 🤨\nPress *help* to check list of commands"

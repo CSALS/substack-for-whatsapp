@@ -242,6 +242,32 @@ export class TwilioController {
         }
     }
 
+    getUserId = async (): Promise<string> => {
+        try {
+            let user = await this.getRegisteredUser()
+            if (!user) {
+                return "You are not registered 🤔\nSend \"register me\" to register"
+            }
+            return `Your user id :- *${user.id}*`
+        } catch (err) {
+            console.log(`Error in finding the user id ${err}`)
+            return "Cant find user id.\nPlease try again"
+        }
+    }
+
+    generateQRCodeWebsite = async (): Promise<string> => {
+        try {
+            let user = await this.getRegisteredUser()
+            if (!user) {
+                return "You are not registered 🤔\nSend \"register me\" to register"
+            }
+            return `Download your *QR code* from here ->\nhttps://a660-122-162-41-166.ngrok.io/testQR/${user.id}`
+        } catch (err) {
+            console.log(`Error in generating QR code website ${err}`)
+            return "Unable to generate QR code.\nPlease try again"
+        }
+    }
+
     //Helper Functions
     isExpectingArticleFromTheUser = async (): Promise<boolean> => {
         let user = await this.getRegisteredUser();

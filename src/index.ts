@@ -29,6 +29,13 @@ app.get("/", (req, res) => {
     });
 });
 
+app.get("/testQR/:userId", (req, res) => {
+    res.render("qrCodeForSubscription.ejs", {
+        twilioBotNumber: process.env.TWILIO_BOT_NUMBER,
+        registerMessage: `Subscribe%20to%20${req.params.userId}`
+    });
+})
+
 app.use("/api", router);
 
 app.listen(PORT, () => {

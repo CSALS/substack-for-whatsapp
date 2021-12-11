@@ -12,9 +12,9 @@
             }
 
             .button {
-                background-color: #e7e7e7;
+                background-color: #555555;
                 border: 1px solid black;
-                color: black;
+                color: white;
                 padding: 15px 32px;
                 text-align: center;
                 text-decoration: none;
@@ -30,28 +30,42 @@
             <h1>Substack for India</h1>
         </div>
         <hr>
-        <div style="float:left;margin-left:100px;margin-top:150px;">
-            <ul style="font-size:20px;">
-                <li>There are 500M+ users on whatsapp from India</li>
-                <li>Share your articles, newsletter, thoughts to your audience right from whatsapp</li>
-                <li>All your content sent directly to your audience whatsapp</li>
-                <li><strong>Full privacy.</strong> Your number won't be shared to your audience</li>
-            </ul>
+
+        <div style="margin-top:5%;margin-bottom:5%">
+            <div>
+                <h2>Share this QR code with your audience <br> so that they can subscribe to your profile</h2>
+            </div>
+            <br>
+            <div id="qrcode" style="display: inline-block; vertical-align: top;"></div>
+            <br>
+            <br>
+            <br>
+            <button id="qrcode-download" class="button">Download QR Code</button>
         </div>
-        <div style="float:right;margin-right:200px;margin-top:50px;">
-            <h2>Scan to Register</h2>
-            <div id="qrcode"></div>
-        </div>
+
         <div style="position:fixed;width:100%;bottom:0;padding-bottom:25px;font-size:120%;">
             <hr>
             <text>Project by Team Jordans</text>
         </div>
     </body>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js" type="text/javascript"></script>
     <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
     <script type="text/javascript">
         const number = "<%- twilioBotNumber %>"
         const message = "<%- registerMessage %>"
         new QRCode(document.getElementById("qrcode"), `https://api.whatsapp.com/send?phone=${number}&text=${message}`)
+
+        document.getElementById("qrcode-download").addEventListener("click", function() {
+            html2canvas(document.getElementById("qrcode")).then(function (canvas) {
+                var anchorTag = document.createElement("a");
+                document.body.appendChild(anchorTag);
+                anchorTag.download = "your-qr-code.jpg";
+                anchorTag.href = canvas.toDataURL();
+                anchorTag.target = '_blank';
+                anchorTag.click();
+            });
+        });
     </script>
 
 </html>
