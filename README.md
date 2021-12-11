@@ -13,7 +13,6 @@ Create .env file by following .env.example file
 ```
 
 ## Start the server
-### On dev
 ```
 npm run dev
 ```
