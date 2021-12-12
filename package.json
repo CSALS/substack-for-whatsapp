@@ -1,5 +1,5 @@
 {
-  "name": "substack-for-India",
+  "name": "dhindora_announce_to_the_world",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,15 +11,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/CSALS/substack-for-India.git"
+    "url": "git+https://github.com/CSALS/dhindora_announce-to-the-world.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/CSALS/substack-for-India/issues"
+    "url": "https://github.com/CSALS/dhindora_announce-to-the-world/issues"
   },
-  "homepage": "https://github.com/CSALS/substack-for-India#readme",
+  "homepage": "https://github.com/CSALS/dhindora_announce-to-the-world#readme",
   "dependencies": {
     "@google-cloud/translate": "^6.3.1",
     "dotenv": "^10.0.0",

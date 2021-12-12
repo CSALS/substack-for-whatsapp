@@ -32,7 +32,7 @@ twilioRouter.post('/receive', async (req: Request, res: Response) => {
         messageToSend = await twilioController.cancelArticle()
     }
     else if (userMessage.includes("hi") || userMessage.includes("hello") || userMessage.includes("hey")) {
-        messageToSend = "Hi there 😃\nWelcome to the *Substack-For-Whatsapp*. \nSubscribe to an author to receive articles";
+        messageToSend = "Hi there 😃\nWelcome to the *Dhindora - Announce To The World*. \nSubscribe to an author to receive articles";
     }
     else if (userMessage.includes("subscribe to")) {
         messageToSend = await twilioController.subscribeUser()
