@@ -32,7 +32,7 @@ app.get("/", (req, res) => {
 app.get("/generateQR/:userId", (req, res) => {
     res.render("qrCodeForSubscription.ejs", {
         twilioBotNumber: process.env.TWILIO_BOT_NUMBER,
-        registerMessage: `Subscribe%20to%20${req.params.userId}%20in English`
+        registerMessage: `Subscribe%20to%20${req.params.userId}%20in%20English`
     });
 })
 
