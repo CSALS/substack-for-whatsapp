@@ -1,4 +1,4 @@
-# Substack for India
+# Dhindora - Announce it to the world (Substack for India)
 
 ## Installation
 
