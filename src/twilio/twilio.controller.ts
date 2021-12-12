@@ -265,7 +265,7 @@ export class TwilioController {
             if (!user) {
                 return "You are not registered 🤔\nSend \"register me\" to register"
             }
-            return `Download your *QR code* from here ->\nhttps://a660-122-162-41-166.ngrok.io/testQR/${user.id}`
+            return `Download your *QR code* from here ->\nhttps://dhindora.onrender.com/generateQR/${user.id}`
         } catch (err) {
             console.log(`Error in generating QR code website ${err}`)
             return "Unable to generate QR code.\nPlease try again"

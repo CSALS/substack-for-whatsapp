@@ -22,43 +22,43 @@ twilioRouter.post('/receive', async (req: Request, res: Response) => {
     else if (isExpectingLanguagePreference) {
         messageToSend = await twilioController.changeLanguagePreference()
     }
-    else if (userMessage === "write article") {
+    else if (userMessage.includes("write article")) {
         messageToSend = await twilioController.initiateArticleWrite()
     }
-    else if (userMessage === "yes") {
+    else if (userMessage.includes("yes")) {
         messageToSend = await twilioController.sendArticleToSubscribers()
     }
-    else if (userMessage === "no") {
+    else if (userMessage.includes("no")) {
         messageToSend = await twilioController.cancelArticle()
     }
-    else if (userMessage === "hi" || userMessage === "hello" || userMessage === "hey") {
+    else if (userMessage.includes("hi") || userMessage.includes("hello") || userMessage.includes("hey")) {
         messageToSend = "Hi there 😃\nWelcome to the *Substack-For-Whatsapp*. \nSubscribe to an author to receive articles";
     }
     else if (userMessage.includes("subscribe to")) {
         messageToSend = await twilioController.subscribeUser()
     }
-    else if (userMessage === "change language") {
+    else if (userMessage.includes("change language")) {
         messageToSend = await twilioController.expectingLanguagePreference()
     }
     else if (userMessage.includes("unsubscribe from")) {
         messageToSend = await twilioController.unsubscribeUser();
     }
-    else if (userMessage === "register me") {
+    else if (userMessage.includes("register me")) {
         messageToSend = await twilioController.registerUser();
     }
-    else if (userMessage === "my subscriptions") {
+    else if (userMessage.includes("my subscriptions")) {
         messageToSend = await twilioController.getSubscriptions()
     }
-    else if (userMessage === "my stats") {
+    else if (userMessage.includes("my stats")) {
         messageToSend = await twilioController.getAuthorStatistics()
     }
-    else if (userMessage === "my user id") {
+    else if (userMessage.includes("my user id")) {
         messageToSend = await twilioController.getUserId()
     }
-    else if (userMessage === "my qr code") {
+    else if (userMessage.includes("my qr code")) {
         messageToSend = await twilioController.generateQRCodeWebsite()
     }
-    else if (userMessage === "help") {
+    else if (userMessage.includes("help")) {
         messageToSend =
             "Hey there 🙂\n" +
             "Here are list of commands you can use :- \n" +
