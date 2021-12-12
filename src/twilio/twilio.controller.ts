@@ -1,7 +1,9 @@
-import { TwilioUserModel, getPhoneNumber } from './twilio.models';
-import { UserDetails, User } from '../models';
+import {getPhoneNumber, TwilioUserModel} from './twilio.models';
+import {DEFAULT_LANGUAGE, LanguageToCodeMap, User, UserDetails} from '../models';
 import {UserCollectionController} from "../firebase/firebase.controller";
 import * as dotenv from "dotenv";
+import {translateText} from "../google-translate.controller";
+
 const twilio = require('twilio');
 
 dotenv.config();
@@ -167,9 +169,11 @@ export class TwilioController {
             for (const subscriberId of user.details.subscribers) {
                 const subscriber = allUsers.find(user => user.id === subscriberId)
                 if (subscriber) {
+                    let translatedText = (subscriber.details.preferredLanguage === DEFAULT_LANGUAGE || !LanguageToCodeMap.get(subscriber.details.preferredLanguage)) ?
+                        article.text : await translateText(article.text, LanguageToCodeMap.get(subscriber.details.preferredLanguage)!!)
                     await twilioClient.messages.create({
                         from: `whatsapp:${process.env.TWILIO_BOT_NUMBER}`,
-                        body: `*Article from ${user.details.name}* :-\n${article.text}`,
+                        body: `*Article from ${user.details.name}* :-\n${translatedText}`,
                         mediaUrl: article.mediaUrl,
                         to: `whatsapp:+91${subscriber.details.number}`
                     })
@@ -179,7 +183,7 @@ export class TwilioController {
             return `Sent to ${user.details.subscribers.length} subscribers successfully`
         } catch (err) {
             console.log(`Error in sending article ${err}`)
-            return "Unable to send article\nPlease try again"
+            return "Unable to send article\nPlease try sending yes or no again"
         }
     }
 
@@ -268,11 +272,58 @@ export class TwilioController {
         }
     }
 
+    expectingLanguagePreference = async (): Promise<string> => {
+        try {
+            let user = await this.getRegisteredUser()
+            if (!user) {
+                return "You are not registered 🤔\nSend \"register me\" to register"
+            }
+            user.details.isExpectingLanguagePreference = true
+            await this.userController.updateUserDetails(user.id, user.details)
+            return "Send the *Language Name* to change preferences \n" +
+                "Here are the available languages :-\n" +
+                [...LanguageToCodeMap.keys()]
+        } catch (err) {
+            console.log(`Error in expectingLanguagePreference ${err}`)
+            return "Internal Error.\nPlease try again"
+        }
+    }
+
+    changeLanguagePreference = async(): Promise<string> => {
+        try {
+            let user = await this.getRegisteredUser()
+            if (!user) {
+                return "You are not registered 🤔\nSend \"register me\" to register"
+            }
+            const language = this.userModel.Body
+            if ([...LanguageToCodeMap.keys()].indexOf(language) < 0) {
+                return "Invalid language\nPlease try again"
+            }
+            user.details.isExpectingLanguagePreference = false
+            user.details.preferredLanguage = language
+            await this.userController.updateUserDetails(user.id, user.details)
+            return `Successfully changed language preference to ${language}`
+
+        } catch (err) {
+            console.log(`Error in changing language preference ${err}`)
+            return "Error in changing language preference.\nPlease try again"
+        }
+    }
+
     //Helper Functions
     isExpectingArticleFromTheUser = async (): Promise<boolean> => {
         let user = await this.getRegisteredUser();
         if (user) {
             return user.details.isExpectingArticle
+        } else {
+            return false
+        }
+    }
+
+    isExpectingLanguagePreferenceFromTheUser = async(): Promise<boolean> => {
+        let user = await this.getRegisteredUser();
+        if (user) {
+            return user.details.isExpectingLanguagePreference
         } else {
             return false
         }
@@ -286,7 +337,9 @@ export class TwilioController {
                 number: getPhoneNumber(this.userModel),
                 articles: [],
                 subscribers: [],
-                isExpectingArticle: false
+                isExpectingArticle: false,
+                isExpectingLanguagePreference: false,
+                preferredLanguage: DEFAULT_LANGUAGE
             } as UserDetails
         } as User
         await this.userController.createUser(user)

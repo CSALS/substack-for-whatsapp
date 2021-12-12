@@ -6,6 +6,7 @@ import { twiml } from 'twilio';
 export const twilioRouter  = express.Router();
 
 twilioRouter.post('/receive', async (req: Request, res: Response) => {
+    console.log(`Received message from ${JSON.stringify(req.body)}`)
     const userModel = req.body as TwilioUserModel
     const twilioController = new TwilioController(userModel)
     userModel.Body = userModel.Body.toLowerCase().trim()
@@ -14,8 +15,12 @@ twilioRouter.post('/receive', async (req: Request, res: Response) => {
     let messageToSend = ""
 
     const isExpectingPost = await twilioController.isExpectingArticleFromTheUser()
+    const isExpectingLanguagePreference = await twilioController.isExpectingLanguagePreferenceFromTheUser()
     if (isExpectingPost) {
         messageToSend = await twilioController.storeArticle()
+    }
+    else if (isExpectingLanguagePreference) {
+        messageToSend = await twilioController.changeLanguagePreference()
     }
     else if (userMessage === "write article") {
         messageToSend = await twilioController.initiateArticleWrite()
@@ -30,7 +35,10 @@ twilioRouter.post('/receive', async (req: Request, res: Response) => {
         messageToSend = "Hi there 😃\nWelcome to the *Substack-For-Whatsapp*. \nSubscribe to an author to receive articles";
     }
     else if (userMessage.includes("subscribe to")) {
-        messageToSend = await twilioController.subscribeUser();
+        messageToSend = await twilioController.subscribeUser()
+    }
+    else if (userMessage === "change language") {
+        messageToSend = await twilioController.expectingLanguagePreference()
     }
     else if (userMessage.includes("unsubscribe from")) {
         messageToSend = await twilioController.unsubscribeUser();
@@ -61,7 +69,8 @@ twilioRouter.post('/receive', async (req: Request, res: Response) => {
             "- If you want to list your subscriptions send *my subscriptions* \n" +
             "- If you want to find your statistics send *my stats* \n" +
             "- If you want to know your user id send *my user id* \n" +
-            "- If you want to download your QR code send *my qr code* \n"
+            "- If you want to download your QR code send *my qr code* \n" +
+            "- If you want to change language in which you receive articles send *change language* \n"
     }
     else {
         messageToSend = "Invalid command 🤨\nPress *help* to check list of commands"
